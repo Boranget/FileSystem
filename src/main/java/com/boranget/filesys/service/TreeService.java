@@ -3,6 +3,8 @@ package com.boranget.filesys.service;
 import com.boranget.filesys.entity.dto.DirectoryDTO;
 import com.boranget.filesys.entity.dto.FileDTO;
 import com.boranget.filesys.entity.FileTreeNode;
+import com.boranget.filesys.global.GlobalCode;
+import com.boranget.filesys.global.GlobalException;
 import com.boranget.filesys.mapper.DirMapper;
 import com.boranget.filesys.mapper.FileMapper;
 import com.boranget.filesys.utils.OtherUtils;
@@ -64,7 +66,7 @@ public class TreeService {
             String s = new ObjectMapper().writeValueAsString(fileTree);
             System.out.println(s);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw GlobalException.fail(e.getMessage());
         }
     }
 
@@ -72,12 +74,12 @@ public class TreeService {
         // 判断插入位置是否存在（获取父文件夹id）
         FileTreeNode location = getLocation(path);
         if (location == null) {
-            throw new RuntimeException("路径不存在");
+            throw GlobalException.fail(GlobalCode.PATH_NOT_EXIST);
         }
         // 判断是否存在同名文件
         boolean existSameNameFile = ifExistSameNameFile(location, fileDTO.getFileName());
         if(existSameNameFile){
-            throw new RuntimeException("已存在同名文件或文件夹");
+            throw GlobalException.fail(GlobalCode.FILE_ALLREADY_EXIST);
         }
         // 构fileDTO，手动设置id，插入数据库
         String randomId = OtherUtils.getRandomId();
@@ -97,12 +99,12 @@ public class TreeService {
         // 判断插入位置是否存在（获取父文件夹id）
         FileTreeNode location = getLocation(path);
         if (location == null) {
-            throw new RuntimeException("路径不存在");
+            throw GlobalException.fail(GlobalCode.PATH_NOT_EXIST);
         }
         // 判断是否存在同名文件
         boolean existSameNameFile = ifExistSameNameFile(location, directoryDTO.getDirName());
         if(existSameNameFile){
-            throw new RuntimeException("已存在同名文件或文件夹");
+            throw GlobalException.fail(GlobalCode.FILE_ALLREADY_EXIST);
         }
         // 构造dirDTO，手动设置id，插入数据库
         String randomId = OtherUtils.getRandomId();

@@ -1,11 +1,9 @@
 package com.boranget.filesys.controller;
 
-import com.boranget.filesys.entity.dto.DirectoryDTO;
 import com.boranget.filesys.entity.dto.FileDTO;
 import com.boranget.filesys.service.TreeService;
-import com.boranget.filesys.utils.Result;
+import com.boranget.filesys.global.GlobalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 @RestController
 public class FileController {
@@ -22,7 +19,7 @@ public class FileController {
     TreeService treeService;
 
     @RequestMapping("/file/add")
-    public Result<String> addFile(@RequestParam(value = "file") MultipartFile file, @RequestParam("path") String path) {
+    public GlobalResponse<String> addFile(@RequestParam(value = "file") MultipartFile file, @RequestParam("path") String path) {
         FileDTO fileDTO = new FileDTO();
         fileDTO.setFileName(file.getOriginalFilename());
         fileDTO.setFileSize(file.getSize());
@@ -57,6 +54,6 @@ public class FileController {
             }
         }
         treeService.addFile(path, fileDTO);
-        return Result.success("");
+        return GlobalResponse.success("");
     }
 }
