@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boranget.filesys.mapper.FileMapper">
+
+    <resultMap id="fileDTO" type="com.boranget.filesys.entity.dto.FileDTO">
+        <id column="id" property="id"/>
+        <result column="file_name" property="fileName"/>
+        <result column="file_content" property="fileContent"/>
+        <result column="file_size" property="fileSize"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+    <!-- 防止批量查询大文件占用内存，所以这里不查询 file_content，有需要的时候再单独查询-->
+    <select id="listAllFileWithParent" resultMap="fileDTO">
+        select f.id, f.file_name,f.file_size, f.modify_time, df.dir_id as parent_dir_id
+        from file_table f LEFT JOIN dir_file_table df
+        ON f.id = df.file_id
+    </select>
+    <update id="move">
+        INSERT INTO dir_file_table (dir_id, file_id)
+        SELECT #{dirId}, #{fileId}
+            WHERE NOT EXISTS (
+                SELECT 1 FROM dir_file_table WHERE file_id = #{fileId}
+                )
+        ;
+        UPDATE dir_file_table SET dir_id = #{dirId} WHERE file_id = #{fileId};
+    </update>
+</mapper>

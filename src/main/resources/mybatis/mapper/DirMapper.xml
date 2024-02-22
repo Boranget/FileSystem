@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boranget.filesys.mapper.DirMapper">
+
+    <resultMap id="directoryDTO" type="com.boranget.filesys.entity.dto.DirectoryDTO">
+        <id column="id" property="id"/>
+        <result column="dir_name" property="dirName"/>
+        <result column="dir_type" property="dirType"/>
+        <result column="mont_id" property="montId"/>
+        <result column="parent_dir_id" property="parentDirId"/>
+    </resultMap>
+    <select id="listAllDirWithParent" resultMap="directoryDTO">
+        select d.id, d.dir_name, d.dir_type, d.mont_id, dd.parent_dir_id
+        from dir_table d LEFT JOIN dir_dir_table dd
+        ON d.id = dd.child_dir_id
+    </select>
+    <update id="move">
+        INSERT INTO dir_dir_table (parent_dir_id, child_dir_id)
+        SELECT #{parentId}, #{dirId}
+            WHERE NOT EXISTS (
+                SELECT 1 FROM dir_dir_table WHERE child_dir_id = #{dirId}
+            )
+        ;
+        UPDATE dir_dir_table SET parent_dir_id = #{parentId} WHERE child_dir_id = #{dirId};
+    </update>
+</mapper>
