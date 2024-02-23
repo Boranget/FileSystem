@@ -1,4 +1,4 @@
-package com.boranget.filesys.global;
+package com.boranget.filesys.entity.global;
 
 import lombok.AllArgsConstructor;
 

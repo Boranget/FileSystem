@@ -2,7 +2,7 @@ package com.boranget.filesys.controller;
 
 import com.boranget.filesys.entity.dto.DirectoryDTO;
 import com.boranget.filesys.service.TreeService;
-import com.boranget.filesys.global.GlobalResponse;
+import com.boranget.filesys.entity.global.GlobalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

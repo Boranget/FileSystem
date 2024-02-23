@@ -6,9 +6,14 @@ spring:
     url: jdbc:mysql://localhost:3306/file_sys?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: 123456
+# 上传文件大小限制
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
 # 配置mybatis规则
 mybatis-plus:
-  mapper-locations:  classpath:/mybatis/mapper/*.xml
+  mapper-locations: classpath:/mybatis/mapper/*.xml
   configuration:
     # 打印mybatis-plus上的sql语句
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
